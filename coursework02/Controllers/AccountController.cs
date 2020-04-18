@@ -11,49 +11,77 @@ using Microsoft.Owin.Security;
 using coursework02.Models;
 using System.Data.Entity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Collections.Generic;
 
 namespace coursework02.Controllers
 {
    // [Authorize]
     public class AccountController : Controller
     {
-        private ApplicationDbContext AppDB;
+        ApplicationDbContext AppDB;
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
         public AccountController()
         {
+            AppDB = new ApplicationDbContext();
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, ApplicationDbContext context )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
+            //_userManager = UserManager;
+            //_signInManager = signInManager;
             UserManager = userManager;
             SignInManager = signInManager;
-            AppDB = context;
+            
         }
         //[Authorize(Roles="Manager")]
         public ActionResult Index()
-        {
-            var users = _userManager.Users.ToList();
-            return View(users);
-        }
-
-        public ActionResult EditUser(string userId)
         {
             var roleStore = new RoleStore<IdentityRole>(AppDB);
             var roleMngr = new RoleManager<IdentityRole>(roleStore);
 
             var roles = roleMngr.Roles.ToList();
+            var users = AppDB.Users.Include(m=>m.Roles).ToList();
+            IEnumerable<UpdateViewModel> userList = (from u in users
+                                                     select new UpdateViewModel
+                                                     {
+                                                         UserId = u.Id,
+                                                         Email = u.Email,
+                                                         PhoneNumber = u.PhoneNumber,
+                                                         UserName = u.UserName,
+                                                         UserRoles =roles.FirstOrDefault(m=>m.Id==u.Roles.FirstOrDefault().RoleId).Name
+                                                     }).AsEnumerable();
+            return View(userList);
+        }
 
-            ViewBag.UserRoles = new SelectList(roles, "Name", "Name");
-            ApplicationUser appUser = _userManager.FindById(userId);
+        public ActionResult EditUser(string id)
+        {
+            if (id != null)
+            {
 
-            return View(appUser);
+                UpdateViewModel update = new UpdateViewModel();
+                var roleStore = new RoleStore<IdentityRole>(AppDB);
+                var roleMngr = new RoleManager<IdentityRole>(roleStore);
+
+                var roles = roleMngr.Roles.ToList();
+
+                var appUser = AppDB.Users.FirstOrDefault(m => m.Id == id);//_userManager.FindById(id);
+                update.Email = appUser.Email;
+                update.UserId = id;
+                update.UserName = appUser.UserName;
+                update.PhoneNumber = appUser.PhoneNumber;
+                ViewBag.UserRoles = new SelectList(roles, "Name", "Name", roles.FirstOrDefault(m => m.Id == appUser.Roles.FirstOrDefault().RoleId).Name);
+
+                return View(update);
+            }
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
         public ActionResult EditUser(UpdateViewModel user)
         {
+           
             var roleStore = new RoleStore<IdentityRole>(AppDB);
             var roleMngr = new RoleManager<IdentityRole>(roleStore);
 
@@ -61,7 +89,8 @@ namespace coursework02.Controllers
 
             ViewBag.UserRoles = new SelectList(roles, "Name", "Name");
 
-            ApplicationUser appUser = _userManager.FindById(user.UserId);
+            ApplicationUser appUser = AppDB.Users.FirstOrDefault(m=>m.Id==user.UserId);
+           
             appUser.PhoneNumber = user.PhoneNumber;
             appUser.Email = user.Email;
             appUser.UserName = user.UserName;
@@ -72,11 +101,15 @@ namespace coursework02.Controllers
 
             if (oldRoleName != user.UserRoles)
             {
-                _userManager.RemoveFromRole(appUser.Id, oldRoleName);
-                _userManager.AddToRole(appUser.Id, user.UserRoles);
+                UserManager.RemoveFromRole(appUser.Id, oldRoleName);
+                UserManager.AddToRole(appUser.Id, user.UserRoles);
+              //  _userManager.RemoveFromRole(appUser.Id, oldRoleName);
+               // _userManager.AddToRole(appUser.Id, user.UserRoles);
             }
-            _userManager.Update(appUser);
-            //  AppDB.Entry(appUser).State = EntityState.Modified;
+           // UserManager.Update(appUser);
+            // _userManager.Update(appUser);
+            AppDB.SaveChanges();
+           // AppDB.Entry(appUser).State = EntityState.Modified;
 
             TempData["Message"] = "User Updated Successfully";
             return RedirectToAction("Index");
@@ -218,15 +251,20 @@ namespace coursework02.Controllers
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
+
+               
                 if (result.Succeeded)
                 {
+                    UserManager.AddToRole(user.Id, model.UserRoles);
+
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    await this.UserManager.AddToRoleAsync(user.Id, model.UserRoles);
 
                     return RedirectToAction("Index", "Home");
                 }
