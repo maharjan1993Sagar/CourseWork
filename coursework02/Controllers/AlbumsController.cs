@@ -42,59 +42,100 @@ namespace coursework02.Controllers
 
         public ActionResult Add()
         {
-            return View();
+            CreateAlbumVM album = new CreateAlbumVM();
+            album.ProducerList = new List<ProducerVM>();
+            album.ArtistList = new List<ArtistVM>();
+
+            album.Producers = new SelectList(db.Producers.ToList(), "Id", "Name");
+            album.Artists = new SelectList(db.Artists.ToList(), "Id", "Name");
+            ProducerVM producer = new ProducerVM { Name = "", Studio = "", DateOfBirth = DateTime.Now };
+            ArtistVM artist = new ArtistVM { BirthDate = DateTime.Now, Email = "" };
+            album.ProducerList.Add(producer);
+            album.ArtistList.Add(artist);
+            return View(album);
         }
         [HttpPost]
         public ActionResult Add(CreateAlbumVM album, HttpPostedFileBase CoverImage)
         {
+            album.Producers = new SelectList(db.Producers.ToList(), "Id", "Name");
+            album.Artists = new SelectList(db.Artists.ToList(), "Id", "Name");
             if (ModelState.IsValid)
             {
-                List<int> artistIds = new List<int>();
-                List<int> producerIds = new List<int>();
+                List<int> artistIds = album.ArtistIds != null ? album.ArtistIds.ToList() : new List<int>();
+                List<int> producerIds = album.ProducerIds != null ? album.ProducerIds.ToList() : new List<int>();
+
+                if (String.IsNullOrEmpty(album.ArtistList[0].Name) && artistIds.Count() == 0)
+                {
+                    ModelState.AddModelError("", "No Artist Selected");
+                    return View(album);
+                }
+
+                if (String.IsNullOrEmpty(album.ProducerList[0].Name) && producerIds.Count() == 0)
+                {
+                    ModelState.AddModelError("", "No Producers Selected");
+                    return View(album);
+                }
 
                 foreach (var item in album.ArtistList)
                 {
-                    Artist artist = new Artist {
-                        BirthDate = item.BirthDate,
-                        Email=item.Email,
-                        Gender=item.Gender,
-                        Name=item.Name,
-                        PhoneNumber=item.PhoneNumber
-                    };
-                    if (!db.Artists.Any(m => m.Email == item.Email && m.Name == item.Name))
+                    if (!String.IsNullOrEmpty(item.Name))
                     {
-                        db.Artists.Add(artist);
-                        db.SaveChanges();
-                        artistIds.Add(artist.Id);
+                        Artist artist = new Artist
+                        {
+                            BirthDate = item.BirthDate,
+                            Email = item.Email,
+                            Gender = item.Gender,
+                            Name = item.Name,
+                            PhoneNumber = item.PhoneNumber
 
-                    }
-                    else
-                    {
-                        artist = db.Artists.FirstOrDefault(m => m.Email == item.Email && m.Name == item.Name);
-                        artistIds.Add(artist.Id);
+                        };
+                        if (!db.Artists.Any(m => m.Email == item.Email && m.Name == item.Name))
+                        {
+                            db.Artists.Add(artist);
+                            db.SaveChanges();
+                            artistIds.Add(artist.Id);
+
+                        }
+                        else
+                        {
+                            artist = db.Artists.FirstOrDefault(m => m.Email == item.Email && m.Name == item.Name);
+                            artistIds.Add(artist.Id);
+                        }
                     }
                 }
 
 
-                 foreach (var item in album.ProducerList)
-                {
-                    Producer producer = new Producer {
-                        DateOfBirth=item.DateOfBirth,
-                        Name=item.Name,
-                        Studio=item.Studio
-                    };
-                    if (!db.Producers.Any(m => m.DateOfBirth == item.DateOfBirth && m.Name == item.Name && m.Studio==item.Studio))
-                    {
-                        db.Producers.Add(producer);
-                        db.SaveChanges();
-                        producerIds.Add(producer.Id);
 
-                    }
-                    else
+                foreach (var item in album.ProducerList)
+                {
+                    if (!string.IsNullOrEmpty(item.Name))
                     {
-                        producer = db.Producers.FirstOrDefault(m => m.DateOfBirth == item.DateOfBirth && m.Name == item.Name && m.Studio == item.Studio);
-                        producerIds.Add(producer.Id);
+                        Producer producer = new Producer
+                        {
+                            DateOfBirth = item.DateOfBirth,
+                            Name = item.Name,
+                            Studio = item.Studio
+                        };
+                        if (!db.Producers.Any(m => m.DateOfBirth == item.DateOfBirth && m.Name == item.Name && m.Studio == item.Studio))
+                        {
+                            db.Producers.Add(producer);
+                            db.SaveChanges();
+                            producerIds.Add(producer.Id);
+
+                        }
+                        else
+                        {
+                            producer = db.Producers.FirstOrDefault(m => m.DateOfBirth == item.DateOfBirth && m.Name == item.Name && m.Studio == item.Studio);
+                            producerIds.Add(producer.Id);
+                        }
                     }
+                }
+
+
+                if (producerIds.Count() == 0 || artistIds.Count() == 0)
+                {
+                    ModelState.AddModelError("", "No Artist or Producers");
+                    return View(album);
                 }
 
                 Albums albums = new Albums
@@ -105,14 +146,50 @@ namespace coursework02.Controllers
                     Name = album.Name,
                     ReleaseDate = album.ReleaseDate,
                     StudioName = album.StudioName,
+                    IsAgeBar = album.IsAgeBar,
+                    FinePerDay = album.FinePerDay,
+                    CopyNumber = album.CopyNumber,
                     CoverImagePath = "~/Images/Albums/"
                 };
 
-                bool Status = db.Albums.Include(m=>m.Artists).Include(m=>m.Producers)
-                            .Any(m => m.Name == albums.Name && m.Producers == albums.Producers && m.Artists == albums.Artists);
+                Albums prevAlbum = db.Albums.Include(m => m.Artists).Include(m => m.Producers)
+                            .FirstOrDefault(m => m.Name == albums.Name);
 
-                if (!Status)
+                bool Status = db.Albums.Include(m => m.Artists).Include(m => m.Producers)
+                            .Any(m => m.Name == albums.Name);
+
+                if (Status)
                 {
+                    if (albums.Producers.Intersect(prevAlbum.Producers) == null && albums.Artists.Intersect(prevAlbum.Artists) == null)
+                    {
+                        db.Albums.Add(albums);
+                        db.SaveChanges();
+
+                        if (!Directory.Exists(Server.MapPath("~/Images/Albums")))
+                        {
+                            Directory.CreateDirectory(Server.MapPath("~/Images/Albums"));
+                        }
+
+                        if (CoverImage.ContentLength > 0)
+                        {
+                            CoverImage.SaveAs(Server.MapPath("~/Images/Albums/" + albums.id + ".jpg"));
+
+
+                        }
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Album Already Exists");
+                        return View(album);
+                    }
+
+                }
+                else
+                {
+                    db.Albums.Add(albums);
+                    db.SaveChanges();
+
                     if (!Directory.Exists(Server.MapPath("~/Images/Albums")))
                     {
                         Directory.CreateDirectory(Server.MapPath("~/Images/Albums"));
@@ -121,14 +198,15 @@ namespace coursework02.Controllers
                     if (CoverImage.ContentLength > 0)
                     {
                         CoverImage.SaveAs(Server.MapPath("~/Images/Albums/" + albums.id + ".jpg"));
+
+
                     }
-
-
+                    return RedirectToAction("Index");
                 }
 
 
             }
-            return View();
+            return View(album);
         }
 
         // GET: Albums/Create

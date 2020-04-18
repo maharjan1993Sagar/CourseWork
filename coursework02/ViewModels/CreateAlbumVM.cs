@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace coursework02.ViewModels
 {
@@ -15,8 +16,12 @@ namespace coursework02.ViewModels
         public string StudioName { get; set; }
         public bool IsAgeBar { get; set; }
         public decimal FinePerDay { get; set; }
-        public HttpPostedFile CoverImage { get; set; }
+        public HttpPostedFileBase CoverImage { get; set; }
+        public int[] ProducerIds { get; set; }
+        public int[] ArtistIds { get; set; }
         public string CoverImagePath { get; set; }
+        public SelectList Artists { get; set; }
+        public SelectList Producers { get; set; }
         public List<ArtistVM> ArtistList { get; set; }
         public List<ProducerVM> ProducerList { get; set; }
 

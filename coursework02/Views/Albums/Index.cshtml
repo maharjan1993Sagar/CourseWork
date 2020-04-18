@@ -43,12 +43,12 @@
            
             <td>
                 @item.ReleaseDate.ToShortDateString()
-            </td>
+            </td>   
             <td>
                 @Html.DisplayFor(modelItem => item.Length)
             </td>
             <td>
-                <img height="50" width="50" src="@Url.Content(item.CoverImagePath+item.id+".jpg")" onerror="if (this.src != 'images/mov.jpg') this.src = 'images/mov.jpg';">
+                <img height="50" width="40" src="@Url.Content(item.CoverImagePath+item.id+".jpg")" onerror="if (this.src != 'images/mov.jpg') this.src = 'images/mov.jpg';">
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.id }) |

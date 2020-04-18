@@ -1,0 +1,69 @@
+﻿@model IEnumerable<coursework02.Models.Member>
+
+@{
+    ViewBag.Title = "GetMemberInActive";
+}
+
+<h2>GetMemberInActive</h2>
+
+<table class="table table-bordered">
+    <tr>
+        <th>
+            Category
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FullName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MemberNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Contact)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateOfBirth)
+        </th>
+
+    </tr>
+    @if (Model.ToList().Count()>0)
+    {
+        foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MemberCatagories.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MemberNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Contact)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateOfBirth)
+            </td>
+            
+        </tr>
+        }
+    }
+    else
+    {
+        <tr><td colspan="7">No Records Found.</td></tr>
+    }
+
+</table>

@@ -1,0 +1,90 @@
+﻿@model coursework02.Models.Loan
+
+@{
+    ViewBag.Title = "GetByCopyNumber";
+}
+
+<h2>GetByCopyNumber</h2>
+<div class="col-md-12">
+    @using (Html.BeginForm("GetByCopyNumber", "Search", FormMethod.Post))
+    {
+        @Html.DropDownList("Id", new SelectList(ViewBag.Id, "Value", "Text"),"Select Album", new { @class = "form-control", id = "ddlId" })
+        <button type="submit"><i class="fa fa-search"></i>Search</button>
+    }
+      
+</div>
+<div class="col-md-12"> &nbsp;</div>
+<table class="table table-bordered">
+    <tr>
+        <th>
+         Album
+        </th>
+        <th>
+          Loan Type
+        </th>
+        <th>
+          MemberNo
+        </th>
+        <th>
+          Total Amount
+        </th>
+        <th>
+          Fine Amount
+        </th>
+        <th>
+          Issued Date
+        </th>
+        <th>
+         Due Date
+        </th>
+        <th>
+          Returned Date
+        </th>
+       
+    </tr>
+    @if (Model != null)
+    {
+       
+        <tr>
+            <td>
+                @Model.Album.Name
+            </td>
+            <td>
+                @Model.LoanTypes.Description
+            </td>
+            <td>
+                @Model.Members.MemberNo
+            </td>
+            <td>
+                @Model.TotalAmount
+            </td>
+            <td>
+                @Model.FineAmount
+            </td>
+            <td>
+                @Model.IssuedDate
+            </td>
+            <td>
+                @Model.DueDate
+            </td>
+            <td>
+                @Model.ReturnedDate
+            </td>
+           
+        </tr>
+        
+    }
+    else
+    {
+        <tr><td colspan="8">No Records Found.</td></tr>
+    }
+
+</table>
+@section scripts{
+    <script>
+        $(document).ready(function(){
+            $("#ddlId").select2({
+            placeholder:'Select Album'});
+        })
+    </script>
+}

@@ -182,21 +182,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202004170417089_initial.cs" />
-    <Compile Include="Migrations\202004170417089_initial.Designer.cs">
-      <DependentUpon>202004170417089_initial.cs</DependentUpon>
+    <Compile Include="Migrations\202004180039262_initial.cs" />
+    <Compile Include="Migrations\202004180039262_initial.Designer.cs">
+      <DependentUpon>202004180039262_initial.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202004170622295_manyToMany.cs" />
-    <Compile Include="Migrations\202004170622295_manyToMany.Designer.cs">
-      <DependentUpon>202004170622295_manyToMany.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202004170746366_returnDateToLoan.cs" />
-    <Compile Include="Migrations\202004170746366_returnDateToLoan.Designer.cs">
-      <DependentUpon>202004170746366_returnDateToLoan.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202004170942495_CopyNumberToAlbum.cs" />
-    <Compile Include="Migrations\202004170942495_CopyNumberToAlbum.Designer.cs">
-      <DependentUpon>202004170942495_CopyNumberToAlbum.cs</DependentUpon>
+    <Compile Include="Migrations\202004180726249_memNo.cs" />
+    <Compile Include="Migrations\202004180726249_memNo.Designer.cs">
+      <DependentUpon>202004180726249_memNo.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -215,6 +207,11 @@
     <Compile Include="Models\Producer.cs" />
     <Compile Include="Models\ProducerAlbum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\AlbumsAllVM.cs" />
     <Compile Include="ViewModels\AlbumVM.cs" />
@@ -228,6 +225,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\font-awesome.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -235,6 +233,10 @@
     <Content Include="Images\mov.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -246,7 +248,9 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -323,6 +327,16 @@
     <Content Include="Views\Search\GetAlbumsAll.cshtml" />
     <Content Include="Views\Role\Create.cshtml" />
     <Content Include="Views\Role\Index.cshtml" />
+    <Content Include="Views\Albums\Add.cshtml" />
+    <Content Include="Views\Search\GetAlbumByArtist.cshtml" />
+    <Content Include="Views\Search\GetAlbumOnShelves.cshtml" />
+    <Content Include="Views\Search\GetLoansByMember.cshtml" />
+    <Content Include="Views\Search\GetByCopyNumber.cshtml" />
+    <Content Include="Views\Search\GetMemberDetail.cshtml" />
+    <Content Include="Views\Search\GetAYearOldAlbum.cshtml" />
+    <Content Include="Views\Search\GetLoanAlbum.cshtml" />
+    <Content Include="Views\Search\GetMemberInActive.cshtml" />
+    <Content Include="Views\Search\GetAlbumInActive.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -342,17 +356,11 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202004170417089_initial.resx">
-      <DependentUpon>202004170417089_initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202004180039262_initial.resx">
+      <DependentUpon>202004180039262_initial.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202004170622295_manyToMany.resx">
-      <DependentUpon>202004170622295_manyToMany.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202004170746366_returnDateToLoan.resx">
-      <DependentUpon>202004170746366_returnDateToLoan.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202004170942495_CopyNumberToAlbum.resx">
-      <DependentUpon>202004170942495_CopyNumberToAlbum.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202004180726249_memNo.resx">
+      <DependentUpon>202004180726249_memNo.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -1,0 +1,44 @@
+﻿@model IEnumerable<coursework02.ViewModels.LoanAlbumVM>
+
+@{
+    ViewBag.Title = "GetLoanAlbum";
+}
+
+<h2>GetLoanAlbum</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table table-bordered">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.TotalLoan)
+        </th>
+        <th>Album</th>
+        <th>IssueDate</th>
+        <th>DueDate</th>
+        <th>Loan Type</th>
+       
+    </tr>
+    @if (Model != null)
+    {
+        foreach (var item in Model)
+        {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.TotalLoan)
+        </td>
+        <td>@item.Loan.Album.Name</td>
+        <td>@item.Loan.IssuedDate</td>
+        <td>@item.Loan.DueDate</td>
+        <td>@item.Loan.LoanTypes.Description</td>
+      
+    </tr>
+        }
+    }
+    else
+    {
+        <tr><td colspan="4">No Record Found.</td></tr>
+    }
+
+</table>

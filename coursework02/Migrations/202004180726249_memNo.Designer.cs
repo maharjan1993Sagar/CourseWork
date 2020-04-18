@@ -7,13 +7,13 @@ namespace coursework02.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class CopyNumberToAlbum : IMigrationMetadata
+    public sealed partial class memNo : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(CopyNumberToAlbum));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(memNo));
         
         string IMigrationMetadata.Id
         {
-            get { return "202004170942495_CopyNumberToAlbum"; }
+            get { return "202004180726249_memNo"; }
         }
         
         string IMigrationMetadata.Source

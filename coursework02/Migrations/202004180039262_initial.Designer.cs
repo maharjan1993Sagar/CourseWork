@@ -7,13 +7,13 @@ namespace coursework02.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class returnDateToLoan : IMigrationMetadata
+    public sealed partial class initial : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(returnDateToLoan));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(initial));
         
         string IMigrationMetadata.Id
         {
-            get { return "202004170746366_returnDateToLoan"; }
+            get { return "202004180039262_initial"; }
         }
         
         string IMigrationMetadata.Source

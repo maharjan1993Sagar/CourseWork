@@ -50,7 +50,7 @@ namespace coursework02.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,FullName,Address,Email,Contact,DateOfBirth,MemberCategoryId")] Member member)
+        public ActionResult Create( Member member)
         {
             if (ModelState.IsValid)
             {

@@ -1,0 +1,97 @@
+﻿@model IEnumerable<coursework02.Models.Loan>
+
+@{
+    ViewBag.Title = "GetLoansByMember";
+}
+
+<h2>GetLoansByMember</h2>
+<div class="col-md-12">
+
+    @using (Html.BeginForm("GetLoansByMember", "Search", FormMethod.Post))
+    {
+        @Html.DropDownList("MemberId", new SelectList(ViewBag.MemberId, "Value", "Text"),"Select Member", new { @class = "form-control", id = "ddlMember" })
+        <button type="submit"><i class="fa fa-search"></i>Search</button>
+    }
+</div>
+<div class="col-md-12"> &nbsp;</div>
+<div class="col-md-12">
+    <table class="table table-bordered">
+        <tr>
+            <th>
+            Album
+            </th>
+            <th>
+             Loan Type
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Members.FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FineAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IssuedDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DueDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReturnedDate)
+            </th>
+        </tr>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Album.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LoanTypes.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Members.FullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TotalAmount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FineAmount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IssuedDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DueDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ReturnedDate)
+                    </td>
+
+                </tr>
+            }
+        }
+        else
+        {
+            <tr><td colspan="8">No Record found.</td></tr>
+        }
+
+    </table>
+</div>
+@section Scripts{
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#ddlMember").select2({
+                placeholder: 'Select Member',
+                allowClear: true
+            });
+        })
+    </script>
+}

@@ -47,7 +47,7 @@ namespace coursework02.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Description")] LoanType loanType)
+        public ActionResult Create( LoanType loanType)
         {
             if (ModelState.IsValid)
             {

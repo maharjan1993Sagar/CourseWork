@@ -12,6 +12,8 @@ namespace coursework02.Models
         [Key]
         public int Id { get; set; }
         [Required]
+        public string MemberNo { get; set; }
+        [Required]
         public string FullName { get; set; }
         [Required]
         public string Address { get; set; }

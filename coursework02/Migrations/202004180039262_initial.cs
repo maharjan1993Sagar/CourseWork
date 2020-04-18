@@ -13,29 +13,15 @@ namespace coursework02.Migrations
                     {
                         id = c.Int(nullable: false, identity: true),
                         Name = c.String(nullable: false),
+                        CopyNumber = c.String(),
                         ReleaseDate = c.DateTime(nullable: false),
                         Length = c.Int(nullable: false),
                         StudioName = c.String(),
+                        IsAgeBar = c.Boolean(nullable: false),
+                        FinePerDay = c.Decimal(nullable: false, precision: 18, scale: 2),
                         CoverImagePath = c.String(),
                     })
                 .PrimaryKey(t => t.id);
-            
-            CreateTable(
-                "dbo.ArtistAlbums",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        ArtistId = c.Int(),
-                        AlbumId = c.Int(nullable: false),
-                        ProducerId = c.Int(),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Albums", t => t.AlbumId, cascadeDelete: true)
-                .ForeignKey("dbo.Artists", t => t.ArtistId)
-                .ForeignKey("dbo.Producers", t => t.ProducerId)
-                .Index(t => t.ArtistId)
-                .Index(t => t.AlbumId)
-                .Index(t => t.ProducerId);
             
             CreateTable(
                 "dbo.Artists",
@@ -69,9 +55,11 @@ namespace coursework02.Migrations
                         MemberId = c.Int(nullable: false),
                         AlbumId = c.Int(nullable: false),
                         LoanTypeId = c.Int(nullable: false),
-                        FineAmount = c.Int(nullable: false),
+                        TotalAmount = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        FineAmount = c.Decimal(nullable: false, precision: 18, scale: 2),
                         IssuedDate = c.DateTime(nullable: false),
-                        ReturnDate = c.DateTime(nullable: false),
+                        DueDate = c.DateTime(nullable: false),
+                        ReturnedDate = c.DateTime(),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Albums", t => t.AlbumId, cascadeDelete: true)
@@ -87,6 +75,7 @@ namespace coursework02.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         Description = c.String(),
+                        Days = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -117,6 +106,32 @@ namespace coursework02.Migrations
                     })
                 .PrimaryKey(t => t.Id);
             
+            CreateTable(
+                "dbo.ArtistAlbum",
+                c => new
+                    {
+                        ArtistId = c.Int(nullable: false),
+                        AlbumId = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => new { t.ArtistId, t.AlbumId })
+                .ForeignKey("dbo.Artists", t => t.ArtistId, cascadeDelete: true)
+                .ForeignKey("dbo.Albums", t => t.AlbumId, cascadeDelete: true)
+                .Index(t => t.ArtistId)
+                .Index(t => t.AlbumId);
+            
+            CreateTable(
+                "dbo.ProducerAlbum",
+                c => new
+                    {
+                        ProducerId = c.Int(nullable: false),
+                        AlbumId = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => new { t.ProducerId, t.AlbumId })
+                .ForeignKey("dbo.Producers", t => t.ProducerId, cascadeDelete: true)
+                .ForeignKey("dbo.Albums", t => t.AlbumId, cascadeDelete: true)
+                .Index(t => t.ProducerId)
+                .Index(t => t.AlbumId);
+            
         }
         
         public override void Down()
@@ -125,23 +140,26 @@ namespace coursework02.Migrations
             DropForeignKey("dbo.Members", "MemberCategoryId", "dbo.MemberCategories");
             DropForeignKey("dbo.Loans", "LoanTypeId", "dbo.LoanTypes");
             DropForeignKey("dbo.Loans", "AlbumId", "dbo.Albums");
-            DropForeignKey("dbo.ArtistAlbums", "ProducerId", "dbo.Producers");
-            DropForeignKey("dbo.ArtistAlbums", "ArtistId", "dbo.Artists");
-            DropForeignKey("dbo.ArtistAlbums", "AlbumId", "dbo.Albums");
+            DropForeignKey("dbo.ProducerAlbum", "AlbumId", "dbo.Albums");
+            DropForeignKey("dbo.ProducerAlbum", "ProducerId", "dbo.Producers");
+            DropForeignKey("dbo.ArtistAlbum", "AlbumId", "dbo.Albums");
+            DropForeignKey("dbo.ArtistAlbum", "ArtistId", "dbo.Artists");
+            DropIndex("dbo.ProducerAlbum", new[] { "AlbumId" });
+            DropIndex("dbo.ProducerAlbum", new[] { "ProducerId" });
+            DropIndex("dbo.ArtistAlbum", new[] { "AlbumId" });
+            DropIndex("dbo.ArtistAlbum", new[] { "ArtistId" });
             DropIndex("dbo.Members", new[] { "MemberCategoryId" });
             DropIndex("dbo.Loans", new[] { "LoanTypeId" });
             DropIndex("dbo.Loans", new[] { "AlbumId" });
             DropIndex("dbo.Loans", new[] { "MemberId" });
-            DropIndex("dbo.ArtistAlbums", new[] { "ProducerId" });
-            DropIndex("dbo.ArtistAlbums", new[] { "AlbumId" });
-            DropIndex("dbo.ArtistAlbums", new[] { "ArtistId" });
+            DropTable("dbo.ProducerAlbum");
+            DropTable("dbo.ArtistAlbum");
             DropTable("dbo.MemberCategories");
             DropTable("dbo.Members");
             DropTable("dbo.LoanTypes");
             DropTable("dbo.Loans");
             DropTable("dbo.Producers");
             DropTable("dbo.Artists");
-            DropTable("dbo.ArtistAlbums");
             DropTable("dbo.Albums");
         }
     }

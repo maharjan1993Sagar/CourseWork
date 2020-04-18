@@ -5,15 +5,13 @@
 }
 
 <h2>GetAlbumsAll</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
+<table class="table table-bordered">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Name)
         </th>
+        <th>Cast</th>
+        <th>Producers</th>
         <th>
             @Html.DisplayNameFor(model => model.ReleaseDate)
         </th>
@@ -21,39 +19,42 @@
             @Html.DisplayNameFor(model => model.Length)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.StudioName)
+            Image
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CoverImagePath)
-        </th>
-        <th>Cast Members</th>
-        <th>Producers</th>
-        <th></th>
+       
     </tr>
+    @if (Model != null)
+    {
+        foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @String.Join(" , ", item.Artists.OrderBy(m => m.Name).Select(m => m.Name))
+            </td>
+            <td>
+                @String.Join(" , ", item.Producers.OrderBy(m => m.Name).Select(m => m.Name))
+            </td>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ReleaseDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Length)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.StudioName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CoverImagePath)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id })
-        </td>
-    </tr>
-}
+            <td>
+                @item.ReleaseDate.ToShortDateString()
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Length)
+            </td>
+            <td>
+                <img height="50" width="40" src="@Url.Content(item.CoverImagePath + item.id + ".jpg")" onerror="if (this.src != 'images/mov.jpg') this.src = 'images/mov.jpg';">
+            </td>
+          
+        </tr>
+        }
+    }
+    else
+    {
+        <tr><td colspan="6"> No Records Found.</td></tr>
+
+    }
 
 </table>

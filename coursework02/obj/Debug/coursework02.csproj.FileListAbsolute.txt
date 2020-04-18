@@ -103,8 +103,6 @@ F:\projects\coursework02\coursework02\obj\Debug\coursework02.csproj.CoreCompileI
 F:\projects\coursework02\coursework02\obj\Debug\coursework02.csproj.CopyComplete
 F:\projects\coursework02\coursework02\obj\Debug\coursework02.dll
 F:\projects\coursework02\coursework02\obj\Debug\coursework02.pdb
-F:\projects\coursework02\coursework02\obj\Debug\coursework02.Migrations.initial.resources
 F:\projects\coursework02\coursework02\obj\Debug\coursework02.csproj.GenerateResource.cache
-F:\projects\coursework02\coursework02\obj\Debug\coursework02.Migrations.manyToMany.resources
-F:\projects\coursework02\coursework02\obj\Debug\coursework02.Migrations.returnDateToLoan.resources
-F:\projects\coursework02\coursework02\obj\Debug\coursework02.Migrations.CopyNumberToAlbum.resources
+F:\projects\coursework02\coursework02\obj\Debug\coursework02.Migrations.initial.resources
+F:\projects\coursework02\coursework02\obj\Debug\coursework02.Migrations.memNo.resources

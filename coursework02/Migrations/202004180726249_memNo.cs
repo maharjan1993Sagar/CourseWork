@@ -3,16 +3,16 @@ namespace coursework02.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class CopyNumberToAlbum : DbMigration
+    public partial class memNo : DbMigration
     {
         public override void Up()
         {
-            AddColumn("dbo.Albums", "CopyNumber", c => c.String());
+            AddColumn("dbo.Members", "MemberNo", c => c.String(nullable: false));
         }
         
         public override void Down()
         {
-            DropColumn("dbo.Albums", "CopyNumber");
+            DropColumn("dbo.Members", "MemberNo");
         }
     }
 }

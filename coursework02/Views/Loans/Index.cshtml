@@ -9,6 +9,10 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+@if (TempData["Message"] != null)
+{
+<div class="alert alert-success">@TempData["Message"]</div>
+}
 <table class="table">
     <tr>
         <th>
@@ -47,10 +51,13 @@
             @Html.DisplayFor(modelItem => item.ReturnedDate)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id }) |
-            @Html.ActionLink("Return","Return",new {id=item.Id })
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id }) |
+            @if (item.ReturnedDate == null)
+            {
+                @Html.ActionLink("Return", "Return", new { id = item.Id })
+            }
         </td>
     </tr>
 }

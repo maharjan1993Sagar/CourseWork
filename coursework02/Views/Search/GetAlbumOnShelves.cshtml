@@ -1,0 +1,73 @@
+﻿@model IEnumerable<coursework02.Models.Albums>
+
+@{
+    ViewBag.Title = "GetAlbumByArtist";
+}
+
+<h2>GetAlbumByArtist</h2>
+<div class="col-md-12">
+
+    @using (Html.BeginForm("GetAlbumOnShelves", "Search", FormMethod.Get))
+    {
+        <input type="text" placeholder="Search.." name="name">
+        <button type="submit"><i class="fa fa-search"></i>Search</button>
+    }
+</div>
+<div class="col-md-12"> &nbsp;</div>
+<div class="col-md-12">
+    <table class="table table-bordered">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>Cast</th>
+            <th>Producers</th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReleaseDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Length)
+            </th>
+            <th>
+                Image
+            </th>
+
+        </tr>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @String.Join(" , ", item.Artists.OrderBy(m => m.Name).Select(m => m.Name))
+                    </td>
+                    <td>
+                        @String.Join(" , ", item.Producers.OrderBy(m => m.Name).Select(m => m.Name))
+                    </td>
+
+                    <td>
+                        @item.ReleaseDate.ToShortDateString()
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Length)
+                    </td>
+                    <td>
+                        <img height="50" width="40" src="@Url.Content(item.CoverImagePath + item.id + ".jpg")" onerror="if (this.src != 'images/mov.jpg') this.src = 'images/mov.jpg';">
+                    </td>
+
+                </tr>
+            }
+        }
+        else
+        {
+            <tr><td colspan="6">No Record Found.</td></tr>
+        }
+    </table>
+</div>
+@section Scripts {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+}

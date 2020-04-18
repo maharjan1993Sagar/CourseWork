@@ -10,10 +10,11 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using coursework02.Models;
 using System.Data.Entity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace coursework02.Controllers
 {
-    [Authorize]
+   // [Authorize]
     public class AccountController : Controller
     {
         private ApplicationDbContext AppDB;
@@ -24,10 +25,11 @@ namespace coursework02.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, ApplicationDbContext context )
         {
             UserManager = userManager;
             SignInManager = signInManager;
+            AppDB = context;
         }
         //[Authorize(Roles="Manager")]
         public ActionResult Index()
@@ -38,6 +40,12 @@ namespace coursework02.Controllers
 
         public ActionResult EditUser(string userId)
         {
+            var roleStore = new RoleStore<IdentityRole>(AppDB);
+            var roleMngr = new RoleManager<IdentityRole>(roleStore);
+
+            var roles = roleMngr.Roles.ToList();
+
+            ViewBag.UserRoles = new SelectList(roles, "Name", "Name");
             ApplicationUser appUser = _userManager.FindById(userId);
 
             return View(appUser);
@@ -46,6 +54,13 @@ namespace coursework02.Controllers
         [HttpPost]
         public ActionResult EditUser(UpdateViewModel user)
         {
+            var roleStore = new RoleStore<IdentityRole>(AppDB);
+            var roleMngr = new RoleManager<IdentityRole>(roleStore);
+
+            var roles = roleMngr.Roles.ToList();
+
+            ViewBag.UserRoles = new SelectList(roles, "Name", "Name");
+
             ApplicationUser appUser = _userManager.FindById(user.UserId);
             appUser.PhoneNumber = user.PhoneNumber;
             appUser.Email = user.Email;
@@ -178,8 +193,12 @@ namespace coursework02.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            ViewBag.Name = new SelectList(AppDB.Roles
-                                           .ToList(), "Name", "Name");
+            var roleStore = new RoleStore<IdentityRole>(AppDB);
+            var roleMngr = new RoleManager<IdentityRole>(roleStore);
+
+            var roles = roleMngr.Roles.ToList();
+
+            ViewBag.Name = new SelectList(roles, "Name", "Name");
             return View();
         }
 
@@ -190,8 +209,11 @@ namespace coursework02.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
-            ViewBag.Name = new SelectList(AppDB.Roles
-                                          .ToList(), "Name", "Name");
+            var roleStore = new RoleStore<IdentityRole>(AppDB);
+            var roleMngr = new RoleManager<IdentityRole>(roleStore);
+
+            var roles = roleMngr.Roles.ToList();
+            ViewBag.Name = new SelectList(roles, "Name", "Name");
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };

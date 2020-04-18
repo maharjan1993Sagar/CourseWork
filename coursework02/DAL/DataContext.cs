@@ -56,6 +56,8 @@ namespace coursework02.DAL
                                             cs.ToTable("ProducerAlbum");
                                         });
         }
+
+      
     }
 
 }

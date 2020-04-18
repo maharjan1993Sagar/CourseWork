@@ -18,10 +18,10 @@ namespace coursework02.Controllers
         // 1
         public ActionResult GetAlbumByArtist(string name)
         {
-            IQueryable<Albums> albums = db.Artists.SelectMany(m => m.Album);
+            List<Albums> albums = new List<Albums>();// db.Artists.SelectMany(m => m.Album).Distinct();
             if (!string.IsNullOrEmpty(name))
             {
-                albums = db.Artists.Where(m => m.Name.Contains(name.Trim())).SelectMany(m => m.Album);
+                albums = db.Artists.Where(m => m.Name.Contains(name.Trim())).SelectMany(m => m.Album).Include(m=>m.Artists).Include(m=>m.Producers).ToList();
             }
             return View(albums);
 
@@ -29,10 +29,10 @@ namespace coursework02.Controllers
         //2
         public ActionResult GetAlbumOnShelves(string name)
         {
-            IQueryable<Albums> albums = db.Artists.SelectMany(m => m.Album);
+            List<Albums> albums = new List<Albums>();// db.Artists.SelectMany(m => m.Album).Distinct();
             if (!string.IsNullOrEmpty(name))
             {
-                albums = db.Artists.Where(m => m.Name.Contains(name.Trim())).SelectMany(m => m.Album);
+                albums = db.Artists.Where(m => m.Name.Contains(name.Trim())).SelectMany(m => m.Album).Include(m=>m.Artists).Include(m=>m.Producers).ToList();
             }
             return View(albums);
 
@@ -46,7 +46,7 @@ namespace coursework02.Controllers
             List<DropDownItem> memItems = (from m in members
                                            select new DropDownItem
                                            {
-                                               Name = m.FullName + " , " + m.Contact,
+                                               Name = m.FullName + " , " + m.MemberNo,
                                                Id = m.Id
                                            }).ToList();
             ViewBag.MemberId = new SelectList(memItems, "Id", "Name");
@@ -69,8 +69,10 @@ namespace coursework02.Controllers
 
             if (MemberId != null)
             {
-                IQueryable<Albums> albums = db.Loans.Where(m => m.MemberId == MemberId.Value).Select(m => m.Album);
-                return View(albums);
+                DateTime currentDate = DateTime.Now.AddDays(-31);
+                IEnumerable<Loan> loans = db.Loans.Where(m => m.MemberId == MemberId.Value&&m.IssuedDate>=currentDate)
+                                            .Include(m => m.Album).Include(m=>m.Members).Include(m=>m.LoanTypes);
+                return View(loans.AsEnumerable());
             }
 
             return View();
@@ -88,18 +90,32 @@ namespace coursework02.Controllers
         public ActionResult GetByCopyNumber()
         {
             IEnumerable<Albums> albums = db.Loans.Include(m => m.Album).Select(m => m.Album);
-            ViewBag.Id = new SelectList(albums, "Id", "CopyNumber");
+            List<DropDownItem> memItems = (from m in albums
+                                           select new DropDownItem
+                                           {
+                                               Name = m.CopyNumber + " , " + m.Name,
+                                               Id = m.id
+                                           }).ToList();
+            ViewBag.Id = new SelectList(memItems, "Id", "Name");
+           // ViewBag.Id = new SelectList(albums, "Id", "CopyNumber");
             return View();
         }
 
         [HttpPost]
         public ActionResult GetByCopyNumber(int? Id)
         {
-            ViewBag.Id = new SelectList(db.Albums.ToList(), "Id", "CopyNumber");
+            IEnumerable<Albums> albums = db.Loans.Include(m => m.Album).Select(m => m.Album);
+            List<DropDownItem> memItems = (from m in albums
+                                           select new DropDownItem
+                                           {
+                                               Name = m.CopyNumber + " , " + m.Name,
+                                               Id = m.id
+                                           }).ToList();
+            ViewBag.Id = new SelectList(memItems, "Id", "Name");
 
             if (Id != null)
             {
-                Loan loan = db.Loans.OrderByDescending(m => m.IssuedDate).FirstOrDefault();
+                Loan loan = db.Loans.Where(m=>m.AlbumId==Id.Value).OrderByDescending(m => m.IssuedDate).FirstOrDefault();
                 return View(loan);
             }
             ViewBag.Error = "Error";
@@ -115,7 +131,8 @@ namespace coursework02.Controllers
                                                     {
                                                         MemberName = l.FullName,
                                                         TotalLoan = db.Loans.Any(m => m.MemberId == l.Id && m.ReturnedDate == null) ?
-                                                        db.Loans.Where(m => m.MemberId == l.Id && m.ReturnedDate == null).ToList().Count() : 0,
+                                                                    db.Loans.Where(m => m.MemberId == l.Id && m.ReturnedDate == null).ToList().Count()
+                                                                    : 0,
                                                         MaxLoan = l.MemberCatagories.TotalLoan
                                                     }).AsEnumerable();
 
@@ -128,10 +145,11 @@ namespace coursework02.Controllers
         public ActionResult GetAYearOldAlbum()
         {
             int[] albumIds = db.Loans.Where(m => m.ReturnedDate == null).Select(m => m.AlbumId).Distinct().ToArray();
-            
+            DateTime ReleaseDate = DateTime.Now.AddDays(-365);
+
             IEnumerable<Albums> albums
-            = albumIds.Count() > 0 ? db.Albums.Where(m => !albumIds.Contains(m.id)).Where(m => m.ReleaseDate.AddDays(365.00) > DateTime.Now)
-                        : db.Albums.Where(m => m.ReleaseDate.AddDays(365.00) > DateTime.Now);
+            = albumIds.Count() > 0 ? db.Albums.Include(m=>m.Artists).Include(m=>m.Producers).Where(m => !albumIds.Contains(m.id)).Where(m => m.ReleaseDate <ReleaseDate)
+                        : db.Albums.Include(m => m.Artists).Include(m => m.Producers).Where(m => m.ReleaseDate < ReleaseDate);
 
             return View(albums);
         }
@@ -155,19 +173,26 @@ namespace coursework02.Controllers
         //12
         public ActionResult GetMemberInActive()
         {
-            IEnumerable<Loan> loans = db.Loans.Include(m => m.Members).
-                                Where(m => m.IssuedDate.AddDays(30) >= DateTime.Now);
+            DateTime IssuedDate = DateTime.Now.AddDays(-30);
 
-           
-            return View(loans);
+            int[] membersIds = db.Loans.Where(m => m.IssuedDate>IssuedDate).Select(m => m.MemberId).Distinct().ToArray();
+            
+            IEnumerable<Member> members = db.Loans.Include(m => m.Members).
+                                Where(m => m.IssuedDate<IssuedDate&& !membersIds.Contains(m.MemberId)).
+                                Select(m=>m.Members).Include(m=>m.MemberCatagories).Distinct().AsEnumerable();
+            
+            return View(members);
         }
 
         //13
         public ActionResult GetAlbumInActive()
         {
-            int[] albumIds = db.Loans.Include(m => m.Album).Where(m => m.IssuedDate.AddDays(30)>=DateTime.Now).Select(m=>m.AlbumId).ToArray();
+            DateTime IssuedDate = DateTime.Now.AddDays(-30);
 
-            IEnumerable<Albums> albums = db.Albums.Where(m => !albumIds.Contains(m.id));
+            int[] albumIds = db.Loans.Include(m => m.Album).Where(m => m.IssuedDate>IssuedDate).Select(m=>m.AlbumId).ToArray();
+
+            IEnumerable<Albums> albums = db.Albums.Where(m => !albumIds.Contains(m.id)).
+                                        Include(m => m.Artists).Include(m => m.Producers);
 
             return View(albums);
 

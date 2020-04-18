@@ -46,7 +46,7 @@ namespace coursework02.Controllers
             List<DropDownItem> loanTypes = (from l in db.LoanTypes
                                             select new DropDownItem
                                             {
-                                                Name = l.Description + "," + l.Days,
+                                                Name = l.Description + ",Days " + l.Days,
                                                 Id = l.Id
                                             }).ToList();
             ViewBag.LoanTypeId = new SelectList(loanTypes, "Id", "Name");
@@ -80,17 +80,21 @@ namespace coursework02.Controllers
                             db.Loans.Where(m => m.MemberId == loan.MemberId && m.ReturnedDate == null).Count() :
                             0;
 
-                if (loanDVD < maxDVD)
+
+
+                if (loanDVD > maxDVD)
                 {
                     ModelState.AddModelError("", "Max Limit Accessed.");
                     return View(loan);
                 }
 
-                if (album.IsAgeBar && age > 18)
+                if ((album.IsAgeBar && age > 18)|| !album.IsAgeBar)
                 {
+                    loan.TotalAmount = db.LoanTypes.Find(loan.LoanTypeId).Days * db.Albums.Find(loan.AlbumId).FinePerDay;
                     loan.ReturnedDate = null;
                     db.Loans.Add(loan);
                     db.SaveChanges();
+                    TempData["Message"] = "Total Amount for Album is " + loan.TotalAmount;
                     return RedirectToAction("Index");
                 }
                 else
@@ -118,11 +122,19 @@ namespace coursework02.Controllers
             {
                 return HttpNotFound();
             }
+            if (loan.ReturnedDate != null)
+            {
+                return RedirectToAction("Index");
+            }
             string FineAmount = "";
             if (loan.DueDate < DateTime.Now)
             {
                 loan.FineAmount = (int)(DateTime.Now - loan.DueDate).TotalDays / 325 * loan.Album.FinePerDay;
                 FineAmount = loan.FineAmount.ToString() + " has been Fined.";
+            }
+            else
+            {
+                FineAmount = "No Fine Amount.";
             }
 
             loan.ReturnedDate = DateTime.Now;
