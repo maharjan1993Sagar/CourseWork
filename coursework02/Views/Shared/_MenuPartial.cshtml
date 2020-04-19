@@ -1,0 +1,13 @@
+﻿@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    <li>@Html.ActionLink("Search","Index","Search")</li>
+
+    if (User.IsInRole("Manager"))
+    {
+        <li>@Html.ActionLink("Assitant/Managers", "Index", "Account")</li>
+        <li>@Html.ActionLink("Register", "Register", "Account")</li>
+
+    }
+
+}

@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+<style>
+    #btnLink {
+    padding:1px;
+    
+    }
+</style>
+<div class="row">
+    <h2>Search Menus</h2>
+    <div>
+        <a href="@Url.Action("GetAlbumByArtist","Search")" id="btnLink" class="btn btn-default">Album By Artist</a>
+        <a href="@Url.Action("GetAlbumInActive","Search")" id="btnLink" class="btn btn-default">Album InActive</a>
+        <a href="@Url.Action("GEtAlbumOnShelves","Search")" id="btnLink" class="btn btn-default">Album On Shelves</a>
+        <a href="@Url.Action("GetAlbumsAll","Search")" id="btnLink" class="btn btn-default">Album All</a>
+        <a href="@Url.Action("GetAYearOldAlbum","Search")" id="btnLink" class="btn btn-default">Get Old Album</a>
+        <a href="@Url.Action("GetByCopyNumber","Search")" id="btnLink" class="btn btn-default">Album By Copy Number</a>
+        <a href="@Url.Action("GetLoanAlbum","Search")" id="btnLink" class="btn btn-default">Loan Albums</a>
+        <a href="@Url.Action("GetLoansByMember","Search")" id="btnLink" class="btn btn-default">Loans By Members</a>
+        <a href="@Url.Action("GetMemberDetail","Search")" id="btnLink" class="btn btn-default">Member Details</a>
+        <a href="@Url.Action("GetMemberInActive","Search")" id="btnLink" class="btn btn-default">Member Inactive</a>
+    </div>
+</div>
+
+

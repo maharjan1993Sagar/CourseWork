@@ -11,11 +11,17 @@ using System.Data.Entity;
 
 namespace coursework02.Controllers
 {
+    [Authorize]
     public class SearchController : Controller
     {
         private DataContext db = new DataContext();
 
+        public ActionResult Index()
+        {
+            return View();
+        }
         // 1
+        [AllowAnonymous]
         public ActionResult GetAlbumByArtist(string name)
         {
             List<Albums> albums = new List<Albums>();// db.Artists.SelectMany(m => m.Album).Distinct();
@@ -27,6 +33,7 @@ namespace coursework02.Controllers
 
         }
         //2
+        [AllowAnonymous]
         public ActionResult GetAlbumOnShelves(string name)
         {
             List<Albums> albums = new List<Albums>();// db.Artists.SelectMany(m => m.Album).Distinct();
@@ -39,6 +46,7 @@ namespace coursework02.Controllers
         }
 
         //3
+
         [HttpGet]
         public ActionResult GetLoansByMember()
         {

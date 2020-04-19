@@ -339,6 +339,8 @@
     <Content Include="Views\Search\GetAlbumInActive.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Account\EditUser.cshtml" />
+    <Content Include="Views\Shared\_MenuPartial.cshtml" />
+    <Content Include="Views\Search\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

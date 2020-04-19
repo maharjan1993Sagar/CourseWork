@@ -20,7 +20,7 @@
        
         
     </tr>
-    @if (Model != null)
+    @if (Model.ToList().Count()>0)
     {
         foreach (var item in Model)
         {

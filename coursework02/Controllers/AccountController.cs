@@ -35,7 +35,7 @@ namespace coursework02.Controllers
             SignInManager = signInManager;
             
         }
-        //[Authorize(Roles="Manager")]
+        [Authorize(Roles="Manager")]
         public ActionResult Index()
         {
             var roleStore = new RoleStore<IdentityRole>(AppDB);
@@ -54,7 +54,7 @@ namespace coursework02.Controllers
                                                      }).AsEnumerable();
             return View(userList);
         }
-
+        [Authorize(Roles = "Manager")]
         public ActionResult EditUser(string id)
         {
             if (id != null)
@@ -77,7 +77,7 @@ namespace coursework02.Controllers
             }
             return RedirectToAction("Index");
         }
-
+        [Authorize(Roles = "Manager")]
         [HttpPost]
         public ActionResult EditUser(UpdateViewModel user)
         {
@@ -223,7 +223,7 @@ namespace coursework02.Controllers
 
         //
         // GET: /Account/Register
-        [AllowAnonymous]
+        [Authorize(Roles = "Manager")]
         public ActionResult Register()
         {
             var roleStore = new RoleStore<IdentityRole>(AppDB);
@@ -237,8 +237,8 @@ namespace coursework02.Controllers
 
         //
         // POST: /Account/Register
+        [Authorize(Roles = "Manager")]
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {

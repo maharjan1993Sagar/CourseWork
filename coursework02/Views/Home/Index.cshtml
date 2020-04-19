@@ -1,28 +1,73 @@
-﻿@{
+﻿@using Microsoft.AspNet.Identity
+@{
     ViewBag.Title = "Home Page";
 }
-<div class="row">
-    <div class="col-md-12">
-        <a href="@Url.Action("GetAlbumByArtist","Search")" class="btn btn-info">Album By Artist</a>|
-        <a href="@Url.Action("GetAlbumInActive","Search")" class="btn btn-info">Album InActive</a>|
-        <a href="@Url.Action("GEtAlbumOnShelves","Search")" class="btn btn-info">Album On Shelves</a>|
-        <a href="@Url.Action("GetAlbumsAll","Search")" class="btn btn-info">Album All</a>|
-        <a href="@Url.Action("GetAYearOldAlbum","Search")" class="btn btn-info">Get Old Album</a>|
-        <a href="@Url.Action("GetByCopyNumber","Search")" class="btn btn-info">Album By Copy Number</a>|
-        <a href="@Url.Action("GetLoanAlbum","Search")" class="btn btn-info">Loan Albums</a>|
-        <a href="@Url.Action("GetLoansByMember","Search")" class="btn btn-info">Loans By Members</a>|
-        <a href="@Url.Action("GetMemberDetail","Search")" class="btn btn-info">Member Details</a>|
-        <a href="@Url.Action("GetMemberInActive","Search")" class="btn btn-info">Member Inactive</a>|
-    </div>
-</div>
+
 <div class="col-md-12">&nbsp;</div>
 <div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+    <h1>Welcome Back</h1>
+    <p>Some Text Goes Here. Some Text Goes Here. Some Text Goes Here.</p>
+    <div class="row">
+        @if (Request.IsAuthenticated)
+        {
+            <div class="col-md-6">
+
+                <h2>Main Menu</h2>
+
+                <ul class="list-group">
+                    <li class="list-group-item">@Html.ActionLink("Artists", "Index", "Artists")</li>
+                    <li class="list-group-item">@Html.ActionLink("Producers", "Index", "Producers")</li>
+                    <li class="list-group-item">@Html.ActionLink("Album", "Index", "Albums")</li>
+                    <li class="list-group-item">@Html.ActionLink("Loan", "Index", "Loans")</li>
+                    <li class="list-group-item">@Html.ActionLink("Loan Types", "Index", "LoanTypes")</li>
+                    <li class="list-group-item">@Html.ActionLink("Member", "Index", "Members")</li>
+                    <li class="list-group-item">@Html.ActionLink("MemberType", "Index", "MemberCategories")</li>
+                    <li class="list-group-item">@Html.ActionLink("Search", "Index", "search")</li>
+
+                </ul>
+
+            </div>
+            <div class="col-md-6">
+                <h2>Search Menu</h2>
+                <ul class="list-group">
+
+                    <li class="list-group-item">
+                        <a href="@Url.Action("GetAlbumByArtist", "Search")">Album By Artist</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="@Url.Action("GetAlbumInActive", "Search")">Album InActive</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="@Url.Action("GEtAlbumOnShelves", "Search")">Album On Shelves</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="@Url.Action("GetAlbumsAll", "Search")">Album All</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="@Url.Action("GetAYearOldAlbum", "Search")">Get Old Album</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="@Url.Action("GetByCopyNumber", "Search")">Album By Copy Number</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="@Url.Action("GetLoanAlbum", "Search")">Loan Albums</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="@Url.Action("GetLoansByMember", "Search")">Loans By Members</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="@Url.Action("GetMemberDetail", "Search")">Member Details</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="@Url.Action("GetMemberInActive", "Search")">Member Inactive</a>
+                    </li>
+                </ul>
+            </div>
+        }
+    </div>
 </div>
 
-<div class="row">
+@*<div class="row">
     <div class="col-md-4">
         <h2>Getting started</h2>
         <p>
@@ -42,4 +87,4 @@
         <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
         <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
     </div>
-</div>
+</div>*@
