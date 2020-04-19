@@ -38,7 +38,7 @@ namespace coursework02
                 user.UserName = "assistant";
                 user.Email = "assistant@gmail.com";
 
-                string userPWD = "Password";
+                string userPWD = "Password1@";
 
                 var chkUser = UserManager.Create(user, userPWD);
 
@@ -63,7 +63,7 @@ namespace coursework02
                 user.UserName = "manager";
                 user.Email = "manager@gmail.com";
 
-                string userPWD = "Password";
+                string userPWD = "Password1@";
 
                 var chkUser = UserManager.Create(user, userPWD);
 
