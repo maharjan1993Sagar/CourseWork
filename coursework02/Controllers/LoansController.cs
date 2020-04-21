@@ -129,7 +129,7 @@ namespace coursework02.Controllers
             string FineAmount = "";
             if (loan.DueDate < DateTime.Now)
             {
-                loan.FineAmount = (int)(DateTime.Now - loan.DueDate).TotalDays / 325 * loan.Album.FinePerDay;
+                loan.FineAmount = (int)(DateTime.Now - loan.DueDate).TotalDays  * loan.Album.FinePerDay;
                 FineAmount = loan.FineAmount.ToString() + " has been Fined.";
             }
             else

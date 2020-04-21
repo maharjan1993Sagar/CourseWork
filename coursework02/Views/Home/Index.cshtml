@@ -5,7 +5,7 @@
 
 <div class="col-md-12">&nbsp;</div>
 <div class="jumbotron">
-    <h1>Welcome Back</h1>
+    <h1>Welcome to Everest Video Library</h1>
     <p>Some Text Goes Here. Some Text Goes Here. Some Text Goes Here.</p>
     <div class="row">
         @if (Request.IsAuthenticated)
@@ -32,34 +32,44 @@
                 <ul class="list-group">
 
                     <li class="list-group-item">
-                        <a href="@Url.Action("GetAlbumByArtist", "Search")">Album By Artist</a>
+                        <a href="@Url.Action("GetAlbumByArtist", "Search")">1.Album By Artist</a>
                     </li>
                     <li class="list-group-item">
-                        <a href="@Url.Action("GetAlbumInActive", "Search")">Album InActive</a>
+                        <a href="@Url.Action("GEtAlbumOnShelves", "Search")">2.Album On Shelves</a>
                     </li>
                     <li class="list-group-item">
-                        <a href="@Url.Action("GEtAlbumOnShelves", "Search")">Album On Shelves</a>
+                        <a href="@Url.Action("GetLoansByMember", "Search")">3.Loans By Members</a>
                     </li>
                     <li class="list-group-item">
-                        <a href="@Url.Action("GetAlbumsAll", "Search")">Album All</a>
+                        <a href="@Url.Action("GetAlbumsAll", "Search")">4.Album All</a>
                     </li>
                     <li class="list-group-item">
-                        <a href="@Url.Action("GetAYearOldAlbum", "Search")">Get Old Album</a>
+                        <a href="@Url.Action("GetByCopyNumber", "Search")">5.Album By Copy Number</a>
                     </li>
                     <li class="list-group-item">
-                        <a href="@Url.Action("GetByCopyNumber", "Search")">Album By Copy Number</a>
+                        <a href="@Url.Action("Create", "Loan")">6.Issue Loan</a>
                     </li>
                     <li class="list-group-item">
-                        <a href="@Url.Action("GetLoanAlbum", "Search")">Loan Albums</a>
+                        <a href="@Url.Action("Index", "Loan")">7.Return Loan</a>
+                    </li>
+                   
+                    <li class="list-group-item">
+                        <a href="@Url.Action("GetMemberDetail", "Search")">8.Member Details</a>
                     </li>
                     <li class="list-group-item">
-                        <a href="@Url.Action("GetLoansByMember", "Search")">Loans By Members</a>
+                        <a href="@Url.Action("Add", "Album")">9.Add Album</a>
                     </li>
                     <li class="list-group-item">
-                        <a href="@Url.Action("GetMemberDetail", "Search")">Member Details</a>
+                        <a href="@Url.Action("GetAYearOldAlbum", "Search")">10.Get Old Album</a>
                     </li>
                     <li class="list-group-item">
-                        <a href="@Url.Action("GetMemberInActive", "Search")">Member Inactive</a>
+                        <a href="@Url.Action("GetLoanAlbum", "Search")">11.Loan Albums</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="@Url.Action("GetMemberInActive", "Search")">12.Member Inactive</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="@Url.Action("GetAlbumInActive", "Search")">13.Album InActive</a>
                     </li>
                 </ul>
             </div>
@@ -68,23 +78,23 @@
 </div>
 
 @*<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>*@
+        <div class="col-md-4">
+            <h2>Getting started</h2>
+            <p>
+                ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
+                enables a clean separation of concerns and gives you full control over markup
+                for enjoyable, agile development.
+            </p>
+            <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>Get more libraries</h2>
+            <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
+            <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>Web Hosting</h2>
+            <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
+            <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+        </div>
+    </div>*@

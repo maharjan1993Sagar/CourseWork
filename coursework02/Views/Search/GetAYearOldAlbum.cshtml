@@ -48,8 +48,8 @@
                 </td>
                 <td>
                     <img height="50" width="40" src="@Url.Content(item.CoverImagePath + item.id + ".jpg")" onerror="if (this.src != 'images/mov.jpg') this.src = 'images/mov.jpg';">
-                </td>
-                <td><a href="@Url.Action("Delete","Albums")" >Delete</a></td>
+                </td>   
+                <td><a href="@Url.Action("Delete","Albums")?id=@item.id" >Delete</a></td>
             </tr>
         }
     }

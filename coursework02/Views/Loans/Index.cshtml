@@ -13,10 +13,10 @@
 {
 <div class="alert alert-success">@TempData["Message"]</div>
 }
-<table class="table">
+<table class="table table-bordered">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Album.Name)
+          Album
         </th>
         <th>
             @Html.DisplayNameFor(model => model.LoanTypes.Description)
@@ -30,6 +30,7 @@
         <th>
             @Html.DisplayNameFor(model => model.ReturnedDate)
         </th>
+        <th>Due Date</th>
         <th></th>
     </tr>
 
@@ -50,6 +51,7 @@
         <td>
             @Html.DisplayFor(modelItem => item.ReturnedDate)
         </td>
+        <td>@item.DueDate.ToShortDateString()</td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
             @Html.ActionLink("Details", "Details", new { id = item.Id }) |
